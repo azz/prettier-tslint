@@ -33,8 +33,11 @@ pretttier-tslint file.ts
 
 ## API
 
+
 ```js
 import format from "prettier-eslint";
 
 format("file.ts");
 ```
+
+Currently the `format` function will write to disk and not return anything. This behavior **will change** in a minor release before `1.0.0` is released.
