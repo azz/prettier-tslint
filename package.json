@@ -1,0 +1,22 @@
+{
+  "name": "prettier-tslint",
+  "description": "Formats your TypeScript using Prettier followed by tslint --fix",
+  "version": "0.1.0",
+  "author": "Lucas Azzola <@azz>",
+  "license": "MIT",
+  "dependencies": {
+    "@std/esm": "^0.11.3",
+    "minimist": "^1.2.0",
+    "tslint": "^5.7.0"
+  },
+  "peerDependencies": {
+    "prettier": "^1.7.4",
+    "typescript": "^2.5.3"
+  },
+  "devDependencies": {
+    "eslint-config-prettier": "^2.6.0",
+    "eslint-plugin-prettier": "^2.3.1",
+    "prettier": "1.7.4",
+    "typescript": "~2.5.3"
+  }
+}

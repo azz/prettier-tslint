@@ -1,0 +1,4 @@
+node_modules
+.esm-cache
+.vscode
+*.log
