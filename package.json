@@ -4,6 +4,12 @@
   "version": "0.0.0-development",
   "author": "Lucas Azzola <@azz>",
   "license": "MIT",
+  "bin": "./bin/prettier-tslint.js",
+  "files": [
+    "bin",
+    "src",
+    "index.js"
+  ],
   "dependencies": {
     "@std/esm": "^0.11.3",
     "minimist": "^1.2.0",
