@@ -15,6 +15,7 @@ install:
   - yarn
 script:
   - yarn lint
+  - yarn build
   - yarn test
 after_success:
   - npm run semantic-release

@@ -6,7 +6,8 @@
     "es6": true
   },
   "globals": {
-    "process": true
+    "process": true,
+    "console": true
   },
   "rules": {
     "curly": ["error"],

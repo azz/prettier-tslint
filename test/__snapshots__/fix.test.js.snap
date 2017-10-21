@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`fix() bad format, bad lint writes fix to disk 1`] = `
+Array [
+  "test/fixture/bad-format-bad-lint.ts",
+  "throw new Error(\\"no-string-throw\\");
+",
+]
+`;
+
+exports[`fix() bad format, good lint writes fix to disk 1`] = `
+Array [
+  "test/fixture/bad-format-good-lint.ts",
+  "throw new Error(\\"no-string-throw\\");
+",
+]
+`;
+
+exports[`fix() good format, bad lint writes fix to disk 1`] = `
+Array [
+  "test/fixture/good-format-bad-lint.ts",
+  "throw new Error(\\"no-string-throw\\");
+",
+]
+`;

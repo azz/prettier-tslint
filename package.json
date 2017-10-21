@@ -4,34 +4,38 @@
   "version": "0.0.0-development",
   "author": "Lucas Azzola <@azz>",
   "license": "MIT",
+  "main": "dist",
   "bin": "./bin/prettier-tslint.js",
   "files": [
     "bin",
-    "src",
-    "index.js"
+    "dist"
   ],
   "dependencies": {
-    "@std/esm": "^0.11.3",
+    "chalk": "^2.2.0",
     "globby": "^6.1.0",
     "ignore": "^3.3.5",
-    "minimist": "^1.2.0",
-    "tslint": "^5.7.0"
+    "tslint": "^5.7.0",
+    "yargs": "^9.0.1"
   },
   "peerDependencies": {
     "prettier": "^1.7.4",
     "typescript": "^2.5.3"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
     "eslint": "^4.9.0",
     "eslint-config-prettier": "^2.6.0",
     "eslint-plugin-prettier": "^2.3.1",
+    "jest": "^21.2.1",
     "prettier": "1.7.4",
     "semantic-release": "^8.0.3",
     "typescript": "~2.5.3"
   },
   "scripts": {
     "lint": "eslint .",
-    "test": "echo soon...",
+    "test": "jest",
+    "build": "babel --copy-files --out-dir dist src",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "repository": {

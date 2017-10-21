@@ -25,7 +25,7 @@ Or with `yarn`:
 yarn add --dev prettier-tslint
 ```
 
-## Confituration
+## Configuration
 
 `prettier-tslint` find and will respect:
 
@@ -37,17 +37,27 @@ yarn add --dev prettier-tslint
 
 ## CLI
 
-```bash
-pretttier-tslint file.ts
+```
+Commands:
+  fix    Fix one or more files
+  check  List files that aren't formatted
+
+Options:
+  --version  Show version number                                       [boolean]
+  --help     Show help                                                 [boolean]
+
+Examples:
+  prettier-tslint fix file1.ts file2.ts  Fix provided files
+  prettier-tslint fix '**/*.ts'          Fix all TypeScript files
+  prettier-tslint check '**/*.ts'        List all unformatted TypeScript files
 ```
 
 ## API
 
-
 ```js
-import format from "prettier-eslint";
+import { fix } from "prettier-tslint";
 
-format("file.ts");
+fix("file.ts");
 ```
 
-Currently the `format` function will write to disk and not return anything. This behavior **will change** in a minor release before `1.0.0` is released.
+Currently the `fix` function will write to disk and not return anything. This behavior **will change** in a minor release before `1.0.0` is released.
