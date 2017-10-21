@@ -1,19 +1,28 @@
 import fs from "fs";
-import tslint from "tslint";
+import * as tslint from "tslint";
 import createProgram from "./create-program";
 
-const runTsLint = filepath => {
+/**
+ * @returns true iff output === input
+ */
+const runTsLint = (filepath, fix) => {
   const code = fs.readFileSync(filepath, "utf8");
   const config = tslint.Configuration.findConfiguration(null, filepath).results;
 
   const program = createProgram(filepath);
 
   // TODO(azz): This actually writes over the file, we don't really want that...
-  const linter = new tslint.Linter({ fix: true }, program);
+  const linter = new tslint.Linter({ fix }, program);
 
   linter.lint(filepath, code, config);
   const result = linter.getResult();
-  return result;
+  if (fix) {
+    // There were no fixes applied
+    return result.fixes.length === 0;
+  } else {
+    // There were no auto-fixable problems
+    return !result.failures.find(failure => failure.fix);
+  }
 };
 
 export default runTsLint;

@@ -1,0 +1,1 @@
+throw "no-string-throw";
