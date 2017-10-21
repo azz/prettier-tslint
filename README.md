@@ -9,8 +9,6 @@ followed by [`tslint --fix`](https://github.com/palantir/tslint).
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=flat-square)](https://github.com/semantic-release/semantic-release)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
 
-> ⚠️ WIP - check back soon!
-
 ## Install
 
 With `npm`:
@@ -25,13 +23,16 @@ Or with `yarn`:
 yarn add --dev prettier-tslint
 ```
 
+`prettier-tslint` allows you to install your own version of `prettier` and
+`typescript`, so make sure you've installed them, too.
+
 ## Configuration
 
 `prettier-tslint` find and will respect:
 
 * `prettier`'s `.prettierrc`, or any other config file such as `package.json`.
 * `prettier`'s `.prettierignore` file.
-* `tslint`'s `tslint.json`
+* `tslint`'s `tslint.json`.
 
 `prettier-tslint` has no additional configuration.
 
@@ -55,9 +56,15 @@ Examples:
 ## API
 
 ```js
-import { fix } from "prettier-tslint";
+import { fix, check } from "prettier-tslint";
 
+check("file.ts"); // -> false
 fix("file.ts");
+check("file.ts"); // -> true
 ```
 
-Currently the `fix` function will write to disk and not return anything. This behavior **will change** in a minor release before `1.0.0` is released.
+Currently the `fix` function will write to disk and not return anything. This behavior **may change** in a minor release before `1.0.0` is released.
+
+## Contributing
+
+See [`CONTRIBUTING.md`](CONTRIBUTING.md)
