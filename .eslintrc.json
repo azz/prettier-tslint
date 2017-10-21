@@ -5,6 +5,9 @@
   "env": {
     "es6": true
   },
+  "globals": {
+    "process": true
+  },
   "rules": {
     "curly": ["error"],
     "prefer-const": ["error"],

@@ -25,6 +25,16 @@ Or with `yarn`:
 yarn add --dev prettier-tslint
 ```
 
+## Confituration
+
+`prettier-tslint` find and will respect:
+
+* `prettier`'s `.prettierrc`, or any other config file such as `package.json`.
+* `prettier`'s `.prettierignore` file.
+* `tslint`'s `tslint.json`
+
+`prettier-tslint` has no additional configuration.
+
 ## CLI
 
 ```bash
