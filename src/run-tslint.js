@@ -1,18 +1,18 @@
-import fs from "fs";
-import * as tslint from "tslint";
+import { readFileSync } from "fs";
+import { Configuration, Linter } from "tslint";
 import createProgram from "./create-program";
 
 /**
  * @returns true iff output === input
  */
 const runTsLint = (filepath, fix) => {
-  const code = fs.readFileSync(filepath, "utf8");
-  const config = tslint.Configuration.findConfiguration(null, filepath).results;
+  const code = readFileSync(filepath, "utf8");
+  const config = Configuration.findConfiguration(null, filepath).results;
 
   const program = createProgram(filepath);
 
   // TODO(azz): This actually writes over the file, we don't really want that...
-  const linter = new tslint.Linter({ fix }, program);
+  const linter = new Linter({ fix }, program);
 
   linter.lint(filepath, code, config);
   const result = linter.getResult();

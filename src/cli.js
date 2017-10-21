@@ -5,8 +5,8 @@ import yargs from "yargs";
 
 import fix from "./fix";
 import check from "./check";
-import expandGlob from "./expand-glob";
-import filterIgnored from "./filter-ignored";
+import expandGlobs from "./expand-globs";
+import createIgnorer from "./create-ignoger";
 
 const cli = argv => {
   const yargsInstance = yargs
@@ -21,32 +21,32 @@ const cli = argv => {
     .demandCommand(1, "Command not provided.")
     .help();
 
-  const args = yargsInstance.parse(argv);
-  const command = args._[0];
-  const patterns = args._.slice(1);
+  const { _: [command, ...patterns] } = yargsInstance.parse(argv);
 
   switch (command) {
     case "fix":
-      return patterns.forEach(fixFiles);
+      return fixFiles(patterns);
     case "check":
-      return patterns.forEach(checkFiles);
+      return checkFiles(patterns);
     default:
       yargs.showHelp();
       console.error(`Unknown command: ${command}`);
   }
 };
 
-const fixFiles = filePattern => {
-  const files = filterIgnored(expandGlob(filePattern));
+const fixFiles = filePatterns => {
+  const ignorer = createIgnorer();
+  const files = expandGlobs(filePatterns);
   files.forEach(file => {
-    const changed = !fix(file);
+    const changed = !fix(file, ignorer);
     console.log(changed ? file : chalk.gray(file));
   });
 };
 
-const checkFiles = filePattern => {
-  const files = filterIgnored(expandGlob(filePattern));
-  const invalid = files.filter(file => !check(file));
+const checkFiles = filePatterns => {
+  const ignorer = createIgnorer();
+  const files = expandGlobs(filePatterns);
+  const invalid = files.filter(file => !check(file, ignorer));
   if (invalid.length) {
     process.exitCode = 1;
   }
