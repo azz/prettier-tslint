@@ -1,7 +1,7 @@
 /* eslint no-console: 0 */
 
 import chalk from "chalk";
-import yargs from "yargs";
+import yargs, { showHelp } from "yargs";
 
 import fix from "./fix";
 import check from "./check";
@@ -9,7 +9,7 @@ import expandGlobs from "./expand-globs";
 import createIgnorer from "./create-ignoger";
 
 const cli = argv => {
-  const yargsInstance = yargs
+  const { _: [command, ...patterns] } = yargs
     // Fix
     .command("fix", "Fix one or more files")
     .example("prettier-tslint fix file1.ts file2.ts", "Fix provided files")
@@ -19,9 +19,8 @@ const cli = argv => {
     .example("prettier-tslint check '**/*.ts'", "List unformatted .ts files")
     // Meta
     .demandCommand(1, "Command not provided.")
-    .help();
-
-  const { _: [command, ...patterns] } = yargsInstance.parse(argv);
+    .help()
+    .parse(argv);
 
   switch (command) {
     case "fix":
@@ -29,7 +28,7 @@ const cli = argv => {
     case "check":
       return checkFiles(patterns);
     default:
-      yargs.showHelp();
+      showHelp();
       console.error(`Unknown command: ${command}`);
   }
 };
