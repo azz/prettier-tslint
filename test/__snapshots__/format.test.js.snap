@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`format() bad format, bad lint passes format 1`] = `
+"throw new Error(\\"no-string-throw\\");
+"
+`;
+
+exports[`format() bad format, good lint passes format 1`] = `
+"throw new Error(\\"no-string-throw\\");
+"
+`;
+
+exports[`format() good format, bad lint passes format 1`] = `
+"throw new Error(\\"no-string-throw\\");
+"
+`;
+
+exports[`format() good format, good lint passes format 1`] = `
+"throw new Error(\\"no-string-throw\\");
+"
+`;
