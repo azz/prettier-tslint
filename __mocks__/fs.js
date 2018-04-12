@@ -1,51 +1,51 @@
-import path from "path";
-
-const actual = require.requireActual("fs");
+const path = require("path");
+const actualFs = require.requireActual("fs");
 
 let writes = Object.create(null);
 
-export const readdirSync = jest.fn(actual.readdirSync);
-export const statSync = jest.fn(actual.statSync);
+const readdirSync = jest.fn(actualFs.readdirSync);
+const statSync = jest.fn(actualFs.statSync);
 
-export const existsSync = jest.fn(filePath => {
+const existsSync = jest.fn(filePath => {
   const relative = path.relative(process.cwd(), filePath);
   if (relative in writes) {
     return true;
   }
-  return actual.existsSync(filePath);
+  return actualFs.existsSync(filePath);
 });
 
-export const writeFileSync = jest.fn((filePath, content) => {
-  const relative = path.relative(process.cwd(), filePath);
-  writes[relative] = content;
-});
-
-export const readFileSync = jest.fn(filePath => {
+const readFileSync = jest.fn(filePath => {
   const relative = path.relative(process.cwd(), filePath);
   if (relative in writes) {
     return writes[relative];
   }
-  return actual.readFileSync(filePath, "utf8");
+  return actualFs.readFileSync(filePath, "utf8");
 });
 
-export const __clear = () => {
+const writeFileSync = jest.fn((filePath, content) => {
+  const relative = path.relative(process.cwd(), filePath);
+  writes[relative] = content;
+});
+
+function __clear() {
   writes = Object.create(null);
   readdirSync.mockClear();
   existsSync.mockClear();
   statSync.mockClear();
-  writeFileSync.mockClear();
   readFileSync.mockClear();
-};
+  writeFileSync.mockClear();
+}
 
-export const __setContents = (filePath, contents) => {
+function __setContents(filePath, contents) {
   writes[filePath] = contents;
-};
+}
 
-export default {
+module.exports = Object.assign({}, actualFs, {
   __clear,
   __setContents,
+  readdirSync,
   existsSync,
   statSync,
   readFileSync,
   writeFileSync,
-};
+});
