@@ -34,7 +34,7 @@ yarn test
 ```
 
 All code is linted with [`eslint`](https://eslint.org/) with
-[`prettier`](prettier.io) integration. To validate your files, run:
+[`prettier`](https://prettier.io) integration. To validate your files, run:
 
 ```bash
 yarn lint
