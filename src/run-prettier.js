@@ -1,23 +1,24 @@
 import { readFileSync, writeFileSync } from "fs";
-import { format, check, resolveConfig } from "prettier";
+import { requireModule, getModulePath, getPrettierConfig } from "./utils";
 
 /**
  * @returns true iff output === input
  */
 const runPrettier = (filepath, fix) => {
-  const config = resolveConfig.sync(filepath);
+  const prettier = requireModule(getModulePath(filepath, "prettier"));
+  const config = getPrettierConfig(filepath, prettier);
   const code = readFileSync(filepath, "utf8");
   const options = Object.assign({ filepath }, config);
 
   if (fix) {
-    const output = format(code, options);
+    const output = prettier.format(code, options);
     if (output !== code) {
       writeFileSync(filepath, output);
       return false;
     }
     return true;
   } else {
-    return check(code, options);
+    return prettier.check(code, options);
   }
 };
 

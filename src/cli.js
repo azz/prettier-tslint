@@ -6,10 +6,12 @@ import yargs, { showHelp } from "yargs";
 import fix from "./fix";
 import check from "./check";
 import expandGlobs from "./expand-globs";
-import createIgnorer from "./create-ignoger";
+import createIgnorer from "./create-ignorer";
 
 const cli = argv => {
-  const { _: [command, ...patterns] } = yargs
+  const {
+    _: [command, ...patterns],
+  } = yargs
     // Fix
     .command("fix", "Fix one or more files")
     .example("prettier-tslint fix file1.ts file2.ts", "Fix provided files")

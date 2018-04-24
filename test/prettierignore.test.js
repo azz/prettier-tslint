@@ -4,9 +4,12 @@ import fs from "fs";
 import check from "../src/check";
 import fix from "../src/fix";
 
-fs.__setContents(".prettierignore", "ignored.ts\n");
-
 describe(".prettierignore", () => {
+  beforeAll(() => {
+    fs.__setContents(".prettierignore", "ignored.ts\n");
+  });
+  afterAll(fs.__clear);
+
   test("check() returns null when file is ignored", () => {
     expect(check("test/fixture/ignored/ignored.ts")).toBeNull();
   });
