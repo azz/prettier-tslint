@@ -21,8 +21,6 @@ import { requireModule, getModulePath, getPrettierConfig } from "./utils";
  * @param {Object} options.fallbackPrettierOptions - the options to pass for
  *  formatting with `prettier` if the given option is not inferrable from the
  *  eslintConfig.
- * @param {String} options.logLevel - the level for the logs
- *  (error, warn, info, debug, trace)
  * @param {Boolean} options.prettierLast - Run Prettier Last
  * @return {String} - the formatted string
  */
@@ -48,13 +46,6 @@ export default function format(options) {
     getPrettierConfig(filePath),
     options.prettierOptions
   );
-
-  /* FIXME: Make the implement of that like prettier-eslint (if needed)
-  const prettierOptionsFromTSLint = getPrettierOptionsFromTSLintRules(
-    tslintConfig,
-    prettierOptions,
-    fallbackPrettierOptions
-  );*/
 
   const prettify = createPrettify(
     prettierOptions || fallbackPrettierOptions || {},
