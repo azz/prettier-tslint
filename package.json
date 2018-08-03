@@ -1,20 +1,22 @@
 {
   "name": "prettier-tslint",
-  "description":
-    "Formats your TypeScript using Prettier followed by tslint --fix",
+  "description": "Formats your TypeScript using Prettier followed by tslint --fix",
   "version": "0.0.0-development",
   "author": "Lucas Azzola <@azz>",
   "license": "MIT",
   "main": "dist",
   "bin": "./bin/prettier-tslint.js",
-  "files": ["bin", "dist"],
+  "files": [
+    "bin",
+    "dist"
+  ],
   "dependencies": {
     "chalk": "^2.4.0",
     "globby": "^8.0.1",
-    "ignore": "^3.3.7",
+    "ignore": "^4.0.3",
     "require-relative": "^0.8.7",
     "tslint": "^5.9.1",
-    "yargs": "^11.0.0"
+    "yargs": "^12.0.1"
   },
   "peerDependencies": {
     "prettier": "^1.7.4",
@@ -23,20 +25,19 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.6.1",
-    "eslint": "^4.19.1",
+    "eslint": "^5.2.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-prettier": "^2.6.0",
-    "jest": "^21.2.1",
-    "prettier": "1.12.1",
-    "semantic-release": "^8.0.3",
-    "typescript": "~2.8.3"
+    "jest": "^23.4.2",
+    "prettier": "1.14.0",
+    "semantic-release": "^15.9.3",
+    "typescript": "~3.0.1"
   },
   "scripts": {
     "lint": "eslint .",
     "test": "jest",
     "build": "babel --copy-files --out-dir dist src",
-    "semantic-release":
-      "semantic-release pre && npm publish && semantic-release post"
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "repository": {
     "type": "git",
