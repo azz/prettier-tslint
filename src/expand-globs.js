@@ -1,7 +1,10 @@
 import globby from "globby";
 
-const expandGlobs = (globs = []) => {
-  return globby.sync([...globs, "!**/node_modules/**", "!./node_modules/**"], {
+const expandGlobs = (globs = [], withNodeModules = false) => {
+  const filteredGlobs = withNodeModules
+    ? globs
+    : [...globs, "!**/node_modules/**", "!./node_modules/**"];
+  return globby.sync(filteredGlobs, {
     dot: true,
   });
 };

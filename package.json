@@ -1,13 +1,15 @@
 {
   "name": "prettier-tslint",
-  "description":
-    "Formats your TypeScript using Prettier followed by tslint --fix",
+  "description": "Formats your TypeScript using Prettier followed by tslint --fix",
   "version": "0.0.0-development",
   "author": "Lucas Azzola <@azz>",
   "license": "MIT",
   "main": "dist",
   "bin": "./bin/prettier-tslint.js",
-  "files": ["bin", "dist"],
+  "files": [
+    "bin",
+    "dist"
+  ],
   "dependencies": {
     "chalk": "^2.4.0",
     "globby": "^8.0.1",
@@ -35,8 +37,7 @@
     "lint": "eslint .",
     "test": "jest",
     "build": "babel --copy-files --out-dir dist src",
-    "semantic-release":
-      "semantic-release pre && npm publish && semantic-release post"
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "repository": {
     "type": "git",
