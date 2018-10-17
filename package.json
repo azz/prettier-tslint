@@ -34,6 +34,7 @@
     "typescript": "~2.8.3"
   },
   "scripts": {
+    "prepare": "npm run build",
     "lint": "eslint .",
     "test": "jest",
     "build": "babel --copy-files --out-dir dist src",
