@@ -6,9 +6,9 @@ cache:
 notifications:
   email: false
 node_js:
+  - '10'
   - '8'
   - '6'
-  - '4'
 env:
   - NODE_ENV=development
 install:
