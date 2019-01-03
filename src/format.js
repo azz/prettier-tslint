@@ -1,5 +1,5 @@
+import { extname } from "path";
 import { readFileSync } from "fs";
-import { applyTSLintAllFixes } from "./apply-fixes";
 import { requireModule, getModulePath, getPrettierConfig } from "./utils";
 
 /**
@@ -25,74 +25,87 @@ import { requireModule, getModulePath, getPrettierConfig } from "./utils";
  * @return {String} - the formatted string
  */
 export default function format(options) {
-  const {
-    filePath,
-    text = readFileSync(filePath, "utf8"),
-    tslintPath = getModulePath(filePath, "tslint"),
-    prettierPath = getModulePath(filePath, "prettier"),
-    prettierLast,
-    fallbackPrettierOptions,
-  } = options;
+  const { filePath } = options;
 
-  const tslintConfig = Object.assign(
-    {},
+  const tslintFix = createTSLintFix(
     options.tslintConfig,
-    getTSLintConfig(filePath, tslintPath)
-  );
-
-  const prettierOptions = Object.assign(
-    {},
-    filePath && { filepath: filePath },
-    getPrettierConfig(filePath),
-    options.prettierOptions
+    options.tslintPath || getModulePath(filePath, "tslint")
   );
 
   const prettify = createPrettify(
-    prettierOptions || fallbackPrettierOptions || {},
-    prettierPath
+    options.prettierOptions || options.fallbackPrettierOptions || {},
+    options.prettierPath || getModulePath(filePath, "prettier")
   );
-  const tslintFix = createTSLintFix(tslintConfig, tslintPath);
 
-  if (prettierLast) {
-    return prettify(tslintFix(text, filePath));
-  }
-  return tslintFix(prettify(text), filePath);
+  const text = options.text || readFileSync(filePath, "utf8");
+  return options.prettierLast
+    ? prettify(tslintFix(text, filePath), filePath)
+    : tslintFix(prettify(text, filePath), filePath);
 }
 
 function createPrettify(formatOptions, prettierPath) {
-  return function prettify(text) {
-    const prettier = requireModule(prettierPath);
-    try {
-      const output = prettier.format(text, formatOptions);
-      return output;
-    } catch (error) {
-      throw error;
-    }
+  const prettier = requireModule(prettierPath);
+  return function prettify(text, filePath) {
+    return prettier.format(
+      text,
+      Object.assign(
+        {},
+        formatOptions,
+        getPrettierConfig(filePath),
+        filePath && { filepath: filePath }
+      )
+    );
   };
 }
 
-function createTSLintFix(tslintConfig, tslintPath) {
-  return function tslintFix(text, filePath) {
-    const tslint = requireModule(tslintPath);
-    try {
-      const linter = new tslint.Linter({
-        fix: false,
-        formatter: "json",
-      });
-
-      linter.lint(filePath, text, tslintConfig);
-      return applyTSLintAllFixes(linter.getResult(), text, tslint);
-    } catch (error) {
-      throw error;
-    }
-  };
-}
-
-function getTSLintConfig(filePath, tslintPath) {
+function createTSLintFix(defaultLintConfig, tslintPath) {
   const tslint = requireModule(tslintPath);
-  try {
-    return tslint.Configuration.findConfiguration(null, filePath).results;
-  } catch (error) {
-    return { rules: {} };
-  }
+  const { findConfiguration } = tslint.Configuration;
+
+  // Adapted from: https://github.com/palantir/tslint/blob/5.12.0/src/linter.ts
+  return function tslintFix(text, filePath) {
+    // TODO: Use the "fix" option of `new tslint.Linter()` once the following
+    // issue is triaged: https://github.com/palantir/tslint/issues/4411
+    const linter = new tslint.Linter({
+      fix: false, // Disabled to avoid file operations.
+      formatter: "json",
+    });
+
+    const lintConfig = Object.assign(
+      {},
+      defaultLintConfig,
+      findConfiguration(null, filePath).results
+    );
+
+    linter.lint(filePath, text, lintConfig);
+    const { failures } = linter.getResult();
+    if (!failures.length) {
+      return text;
+    }
+
+    // This is a private method, but we're using it as a workaround.
+    const enabledRules = linter.getEnabledRules(
+      lintConfig,
+      extname(filePath) === ".js"
+    );
+
+    // To keep rules from interfering with one another, we apply their fixes one
+    // rule at a time. More info: https://github.com/azz/prettier-tslint/issues/26
+    return enabledRules.reduce((text, rule) => {
+      const { ruleName } = rule.getOptions();
+      const hasFix = f => f.hasFix() && f.getRuleName() === ruleName;
+      if (failures.some(hasFix)) {
+        const sourceFile = tslint.getSourceFile(filePath, text);
+        const fixableFailures = tslint
+          .removeDisabledFailures(sourceFile, rule.apply(sourceFile))
+          .filter(f => f.hasFix());
+
+        if (fixableFailures.length) {
+          const fixes = fixableFailures.map(f => f.getFix());
+          return tslint.Replacement.applyFixes(text, fixes);
+        }
+      }
+      return text;
+    }, text);
+  };
 }
