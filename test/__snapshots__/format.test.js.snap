@@ -5,6 +5,11 @@ exports[`format() bad format, bad lint passes format 1`] = `
 "
 `;
 
+exports[`format() bad format, bad lint. with 'prettierLast' of false value whould not pass format 1`] = `
+"throw new Error(\\"no-string-throw\\");
+"
+`;
+
 exports[`format() bad format, good lint passes format 1`] = `
 "throw new Error(\\"no-string-throw\\");
 "
@@ -17,5 +22,21 @@ exports[`format() good format, bad lint passes format 1`] = `
 
 exports[`format() good format, good lint passes format 1`] = `
 "throw new Error(\\"no-string-throw\\");
+"
+`;
+
+exports[`format() no-unnecessary-type-assertion format, which is required type infomation 1`] = `
+"const a: number = 0;
+console.log(a);
+"
+`;
+
+exports[`format() prefer-readonly format, which is required type infomation 1`] = `
+"class MyClass {
+  private readonly name: string;
+  sayHello() {
+    console.log(\`Hello \${this.name}\`);
+  }
+}
 "
 `;

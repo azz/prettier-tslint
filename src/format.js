@@ -1,6 +1,8 @@
-import { extname } from "path";
+import * as path from "path";
 import { readFileSync } from "fs";
 import { requireModule, getModulePath, getPrettierConfig } from "./utils";
+import { findTsconfigPath } from "./configurations";
+import { createProgramWithFile } from "./create-program";
 
 /**
  * Formats the text with prettier and then eslint based on the given options
@@ -64,12 +66,21 @@ function createTSLintFix(defaultLintConfig, tslintPath) {
 
   // Adapted from: https://github.com/palantir/tslint/blob/5.12.0/src/linter.ts
   return function tslintFix(text, filePath) {
+    const tsconfigFile = findTsconfigPath(undefined, path.resolve(filePath));
+    let program;
+    if (tsconfigFile) {
+      program = tslint.Linter.createProgram(tsconfigFile);
+    }
+
     // TODO: Use the "fix" option of `new tslint.Linter()` once the following
     // issue is triaged: https://github.com/palantir/tslint/issues/4411
-    const linter = new tslint.Linter({
-      fix: false, // Disabled to avoid file operations.
-      formatter: "json",
-    });
+    const linter = new tslint.Linter(
+      {
+        fix: false, // Disabled to avoid file operations.
+        formatter: "json",
+      },
+      program
+    );
 
     const lintConfig = Object.assign(
       {},
@@ -86,18 +97,25 @@ function createTSLintFix(defaultLintConfig, tslintPath) {
     // This is a private method, but we're using it as a workaround.
     const enabledRules = linter.getEnabledRules(
       lintConfig,
-      extname(filePath) === ".js"
+      path.extname(filePath) === ".js"
     );
-
     // To keep rules from interfering with one another, we apply their fixes one
     // rule at a time. More info: https://github.com/azz/prettier-tslint/issues/26
     return enabledRules.reduce((text, rule) => {
       const { ruleName } = rule.getOptions();
       const hasFix = f => f.hasFix() && f.getRuleName() === ruleName;
       if (failures.some(hasFix)) {
-        const sourceFile = tslint.getSourceFile(filePath, text);
+        const program = createProgramWithFile({
+          fileName: filePath,
+          content: text,
+        });
+        const sourceFile = program.getSourceFile(filePath);
+
         const fixableFailures = tslint
-          .removeDisabledFailures(sourceFile, rule.apply(sourceFile))
+          .removeDisabledFailures(
+            sourceFile,
+            linter.applyRule(rule, sourceFile)
+          )
           .filter(f => f.hasFix());
 
         if (fixableFailures.length) {

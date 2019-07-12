@@ -1,5 +1,7 @@
 {
   "rules": {
-    "no-string-throw": true
+    "no-string-throw": true,
+    "prefer-readonly": true,
+    "no-unnecessary-type-assertion": true
   }
 }

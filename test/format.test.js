@@ -32,4 +32,29 @@ describe("format()", () => {
       })
     ).toMatchSnapshot();
   });
+
+  test("no-unnecessary-type-assertion format, which is required type infomation", () => {
+    expect(
+      format({
+        filePath: "test/fixture/no-unnecessary-type-assertion.ts",
+      })
+    ).toMatchSnapshot();
+  });
+
+  test("prefer-readonly format, which is required type infomation", () => {
+    expect(
+      format({
+        filePath: "test/fixture/prefer-readonly.ts",
+      })
+    ).toMatchSnapshot();
+  });
+
+  test("bad format, bad lint. with 'prettierLast' of false value whould not pass format", () => {
+    expect(
+      format({
+        filePath: "test/fixture/bad-format-bad-lint.ts",
+        prettierLast: false,
+      })
+    ).toMatchSnapshot();
+  });
 });
