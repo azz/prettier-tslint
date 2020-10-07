@@ -14,7 +14,7 @@
     "ignore": "^3.3.7",
     "require-relative": "^0.8.7",
     "tslint": "^5.9.1",
-    "yargs": "^11.0.0"
+    "yargs": "^16.0.3"
   },
   "peerDependencies": {
     "prettier": "^1.7.4",
